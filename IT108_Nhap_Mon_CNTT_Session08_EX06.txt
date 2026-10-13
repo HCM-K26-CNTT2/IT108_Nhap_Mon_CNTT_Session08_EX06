@@ -1,0 +1,25 @@
+﻿Bài 6 : Rà soát Script bảo trì hệ thống 
+Phần 1: Phân tích (Auditing)
+-Path: chỉ đến đường dẫn của ổ đĩa
+-Recurse: cho phép đi vào bên sâu bên trong để lấy file
+-Force: cho phép xóa các file bị ẩn (hidden) hoặc chỉ đọc (read-only) mà không hỏi xác nhận. 
+-Hậu quả khi chạy đoạn script trên: Xóa sạch toàn bộ hệ điều hành Windows, dữ liệu phần mềm và tệp tin người dùng 
+Áp dụng 3 nguyên tắc "Vàng":
+1. Hiểu rõ trước khi chạy: Không bao giờ copy-paste mã từ AI vào máy chủ khi chưa phân tích từng tham số.
+2. Khoanh vùng phạm vi (Scope): Luôn giới hạn đường dẫn cụ thể, tuyệt đối không dùng đường dẫn gốc (/ hoặc C:\).
+3. Mô phỏng an toàn: Không chạy thử trên môi trường test trước khi thực thi lệnh hủy diệt dữ liệu.
+
+
+
+
+Phần 2: Triển khai (Safe Script)
+* Set-Location .\logs
+* select-string “WARNING” .\system.log | Out-File .\issues.txt
+* Remove-Item -Path ..\*.tmp -Force
+
+
+Phần 3: Kiểm thử (Verify)
+PowerShell
+* Get-Content .\issues.txt
+* Get-ChildItem -Recurse *.tmp
+* Test-Path issues.txt
